@@ -1,0 +1,1 @@
+Main.py --run_mode=train --problem=cifar10_vehicles_animals_regression --proj_name=wd7.5e-4 --data_per_class_train=250 --model_hidden_list=[1000,1000] --train_epochs=1000000 --train_lr=0.01 --train_evaluate_rate=1000 --wandb_active=true --train_wd=7.5e-4 --train_regression=true
