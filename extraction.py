@@ -44,7 +44,7 @@ def get_trainable_params(args, x0):
     n, c, h, w = x0.shape
     x = torch.randn(args.extraction_data_amount, c, h, w).to(args.device) * args.extraction_init_scale
     x.requires_grad_(True)
-    if args.extraction_regression or args.no_kkt_reconstruction:
+    if args.extraction_regression:
         l = torch.randn(args.extraction_data_amount, 1).to(args.device)
     else:
         l = torch.rand(args.extraction_data_amount, 1).to(args.device)
@@ -56,7 +56,7 @@ def get_trainable_params(args, x0):
 
 def get_kkt_loss(args, values, l, y, model):
     l = l.squeeze()
-    if args.extraction_regression or args.no_kkt_reconstruction:  # regression
+    if args.extraction_regression:  # regression
         output = values * l
     elif args.output_dim > 1:  # multiclass
         phi_yi = values.gather(1, y.view(-1, 1)).squeeze()
@@ -91,7 +91,7 @@ def get_verify_loss(args, x, l):
     loss_verify = 0
     loss_verify += 1 * (x - 1).relu().pow(2).sum()
     loss_verify += 1 * (-1 - x).relu().pow(2).sum()
-    if not (args.extraction_regression or args.no_kkt_reconstruction):
+    if not args.extraction_regression:
         loss_verify += 5 * (-l + args.extraction_min_lambda).relu().pow(2).sum()
 
     return loss_verify
