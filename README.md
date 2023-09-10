@@ -69,8 +69,8 @@ for our losses without trial and error.
 
 These reconstructions can be reproduced by running the following commandlines (the right hyperparameter can be found there):
 
-- multiclass: ```command_line_args/reconstruct_cifar10_b9dfyspx_args.txt``` and ```command_line_args/reconstruct_cifar10_k60fvjdy_args.txt```
-- regression: ```command_line_args/reconstruct_mnist_kcf9bhbi_args.txt``` and ```command_line_args/reconstruct_mnist_rbijxft7_args.txt```
+- multiclass: ```command_line_args/reconstruct_multiclass_run1_args.txt``` and ```command_line_args/reconstruct_multiclass_run2_args.txt```
+- regression: ```command_line_args/reconstruct_regression_run1_args.txt``` and ```command_line_args/reconstruct_regression_run2_args.txt```
 
 
 ### Training/Reconstructing New Learning Problems

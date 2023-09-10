@@ -1,0 +1,25 @@
+{
+    "config": {
+        "method": "random",
+        "metric": {
+            "goal": "minimize",
+            "name": "extraction score"
+        },
+        "parameters":
+            {"data_per_class_train":{"value":250},
+            "extraction_data_amount_per_class":{"value":500},
+            "extraction_epochs":{"value":50000},
+            "extraction_evaluate_rate":{"value":1000},
+            "extraction_init_scale":{"value":0.0000035037811317963737},
+            "extraction_lr":{"value":0.9491354660734844},
+            "extraction_model_relu_alpha":{"value":103.71728734563524},
+            "model_hidden_list":{"value":"[1000,1000]"},
+            "pretrained_model_path":{"value":"weights-cifar10_vehicles_animals_regression_d250_wd7.5e-4.pth"},
+            "problem":{"value":"cifar10_vehicles_animals_regression"},
+            "run_mode":{"value":"reconstruct"},
+            "wandb_active":{"value":true}}
+        },
+    "full_name": "cifar10_multiclass",
+    "pretrained_model_path": "weights-cifar10_multiclass_d50.pth",
+    "problem": "cifar10_multiclass"
+}

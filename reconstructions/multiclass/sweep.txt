@@ -1,0 +1,30 @@
+{
+    "config": {
+        "method": "random",
+        "metric": {
+            "goal": "minimize",
+            "name": "extraction score"
+        },
+        "parameters": {
+            "data_per_class_train":
+            {"value": 50},
+            "extraction_data_amount_per_class":{"value":100},
+            "extraction_epochs":{"value":50001},
+            "extraction_evaluate_rate":{"value":1000},
+            "extraction_init_scale":{"value":0.000360518547049631},
+            "extraction_lambda_lr":{"value":0.9512763978427656},
+            "extraction_lr":{"value":0.00024198142474905472},
+            "extraction_min_lambda":{"value":0.04011794836931207},
+            "extraction_model_relu_alpha":{"value":326.46588669096246},
+            "model_hidden_list":{"value":"[1000,1000]"},
+            "model_init_list":{"value":"[0.0001,0.0001]"},
+            "pretrained_model_path":{"value":"weights-cifar10_multiclass_d50_public_code.pth"},
+            "problem":{"value":"cifar10_multiclass"},"proj_name":{"value":"cifar10_multiclass_d50_wd0_init0.0001"},
+            "run_mode":{"value":"reconstruct"},
+            "wandb_active":{"value":true}
+            }
+        },
+    "full_name": "cifar10_multiclass",
+    "pretrained_model_path": "weights-cifar10_multiclass_d50.pth",
+    "problem": "cifar10_multiclass"
+}
