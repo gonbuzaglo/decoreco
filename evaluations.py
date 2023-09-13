@@ -2,7 +2,6 @@ import torch
 import torchvision
 import common_utils
 from common_utils.common import flatten
-from common_utils.image import get_ssim_pairs_kornia
 
 
 def normalize_batch(x, ret_all=False):
@@ -102,81 +101,12 @@ def viz_nns(x, y, max_per_nn=None, metric='ncc', ret_all=False):
     return qq, v
 
 
-def get_evaluation_score_dssim(xxx, yyy, ds_mean, vote=None, show=False):
-    xxx = xxx.clone()
-    yyy = yyy.clone()
-
-    x2search = torch.nn.functional.interpolate(xxx, scale_factor=1 / 2, mode='bicubic')
-    y2search = torch.nn.functional.interpolate(yyy, scale_factor=1 / 2, mode='bicubic')
-    D = ncc_dist(y2search, x2search, div_dim=True)
-
-    dists, idxs = D.sort(dim=1, descending=False)
-
-    if vote is not None:
-        # Ignore distant nearest-neighbours
-        xs_idxs = []
-        for i in range(dists.shape[0]):
-            x_idxs = [idxs[i, 0].item()]
-            for j in range(1, dists.shape[1]):
-                if (dists[i, j] / dists[i, 0]) < 1.1:
-                    x_idxs.append(idxs[i, j].item())
-                else:
-                    break
-            xs_idxs.append(x_idxs)
-
-        # Voting
-        xs = []
-        for x_idxs in xs_idxs:
-            if vote == 'min':
-                x_voted = xxx[x_idxs[0]].unsqueeze(0)
-            elif vote == 'mean':
-                x_voted = xxx[x_idxs].mean(dim=0, keepdim=True)
-            elif vote == 'median':
-                x_voted = xxx[x_idxs].median(dim=0, keepdim=True).values
-            elif vote == 'mode':
-                x_voted = xxx[x_idxs].mode(dim=0, keepdim=True).values
-            else:
-                raise
-            xs.append(x_voted)
-        xx = torch.cat(xs, dim=0).clone()
-        yy = yyy
-    else:
-        xx = xxx[idxs[:, 0]]
-        yy = yyy
-
-    # Scale to images
-    yy += ds_mean
-    xx = transform_vmin_vmax_batch(xx + ds_mean)
-
-    # Score
-    ssims = get_ssim_pairs_kornia(xx, yy)
-    dssim = (1 - ssims) / 2
-    dssims, sort_idxs = dssim.sort(descending=False)
-
-    # Sort & Show
-    xx = xx[sort_idxs]
-    yy = yy[sort_idxs]
-
-    qq = torch.stack(common_utils.common.flatten(list(zip(xx, yy))))
-    grid = torchvision.utils.make_grid(qq[:100], normalize=False, nrow=20)
-
-    if show:
-        import matplotlib.pyplot as plt
-        plt.figure(figsize=(80 * 2, 10 * 2))
-        plt.imshow(grid.permute(1, 2, 0).cpu().numpy())
-
-    ev_score = dssims[:10].mean()
-    return ev_score.item(), grid
-
 
 def get_model_outputs_on_grid(model, lim=1.5, n=1000):
     x_coord = torch.linspace(-lim, lim, n)
     y_coord = torch.linspace(-lim, lim, n)
     grid = torch.stack(torch.meshgrid([x_coord, y_coord], indexing=None))
     zi = model(grid.reshape(2, -1).t().to('cuda')).reshape(n, n).cpu().data
-    xi = grid[0,:,:].cpu()
-    yi = grid[1,:,:].cpu()
+    xi = grid[0, :, :].cpu()
+    yi = grid[1, :, :].cpu()
     return xi, yi, zi
-
-
-

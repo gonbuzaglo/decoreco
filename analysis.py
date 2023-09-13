@@ -3,7 +3,6 @@ import torchvision
 from tqdm.auto import tqdm
 
 import common_utils
-from common_utils.image import get_ssim_all, get_ssim_pairs_kornia
 from evaluations import l2_dist, ncc_dist, normalize_batch, transform_vmin_vmax_batch
 
 
@@ -55,10 +54,6 @@ def find_nearest_neighbour(X, x0, search='ncc', vote='mean', use_bb=True, nn_thr
         x2search = torch.nn.functional.interpolate(xxx, scale_factor=1/4, mode='bicubic', align_corners=False)
         y2search = torch.nn.functional.interpolate(yyy, scale_factor=1/4, mode='bicubic', align_corners=False)
         D = ncc_dist(y2search, x2search, div_dim=True)
-    elif search == 'dssim':
-        D_ssim = get_ssim_all(yyy, xxx)
-        D_dssim = (1 - D_ssim)/2
-        D = D_dssim
 
     # Only consider Best-Bodies
     if use_bb:
@@ -132,11 +127,7 @@ def sort_by_metric(xx, yy, sort='ssim'):
     psnr = lambda a, b: 20 * torch.log10(1.0 / (a - b).pow(2).reshape(a.shape[0], -1).mean(dim=1).sqrt())
 
     # Sort
-    if sort == 'ssim':
-        dists = get_ssim_pairs_kornia(xx, yy)
-        dssim = (1 - dists) / 2
-        _, sort_idxs = dists.sort(descending=True)
-    elif sort == 'ncc':
+    if sort == 'ncc':
         dists = (normalize_batch(xx) - normalize_batch(yy)).reshape(xx.shape[0], -1).norm(dim=1)
         _, sort_idxs = dists.sort()
     elif sort == 'l2':

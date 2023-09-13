@@ -4,7 +4,7 @@ import torchvision
 import wandb
 from common_utils.common import now
 from CreateModel import Flatten
-from evaluations import get_evaluation_score_dssim, viz_nns
+from evaluations import viz_nns
 
 
 def l2_dist(x, y):
@@ -26,18 +26,6 @@ def diversity_loss(x, min_dist):
         return relevant_nns.mul(-20).sigmoid().mean()
     else:
         return torch.tensor(0)
-
-
-# def send_input_data(args, model, x0, y0):
-#     if not args.wandb_active: return
-#     _, c, h, w = x0.shape
-#     n_weights = model.layers[0].weight.shape[0]
-#     w = model.layers[0].weight.reshape(n_weights, c, h, w)
-#     w_nns, _ = viz_nns(w.data, x0, max_per_nn=2)
-#     w_viz = torchvision.utils.make_grid(w_nns[:100], normalize=False, nrow=20)
-#     wandb.log({
-#         "weights_of_first_layer": wandb.Image(w_viz),
-#     })
 
 
 def get_trainable_params(args, x0):
@@ -148,7 +136,6 @@ def evaluate_extraction(args, epoch, loss_extract, loss_verify, x, x0, y0, ds_me
     # SSIM EVALUATION
     xx = x.data.clone()
     yy = x0.clone()
-    dssim_score, dssim_grid = get_evaluation_score_dssim(xx, yy, ds_mean, vote=None, show=False)
 
     if args.wandb_active:
         wandb.log({
@@ -156,8 +143,6 @@ def evaluate_extraction(args, epoch, loss_extract, loss_verify, x, x0, y0, ds_me
             "extraction score": extraction_score,
             "extraction with mean": wandb.Image(extraction_grid_with_mean),
             "extraction score with mean": extraction_score_with_mean,
-            "dssim score": dssim_score,
-            "extraction dssim": wandb.Image(dssim_grid),
         })
 
     print(f'{now()} T={epoch} ; Losses: extract={loss_extract.item():5.10g} verify={loss_verify.item():5.5g} grads={x_grad.abs().mean()} Extraction-Score={extraction_score} Extraction-DSSIM={dssim_score}')
