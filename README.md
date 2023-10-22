@@ -50,7 +50,7 @@ for reproducing the training of the provided models and their provided reconstru
 
 
 #### Training
-For reproducing the training of the provided two trained MLP models (with architecture D-1000-1000-10, D-1000-1000-1):
+For reproducing the training of the provided two trained MLP models (with architecture D-1000-1000-10, and D-1000-1000-1):
 
  - multiclass model (for reproduction run ```command_line_args/train_cifar10_multiclass_args.txt```)
  - regression model (for reproduction run ```command_line_args/train_cifar10_vehicles_animals_regression_args.txt```)
