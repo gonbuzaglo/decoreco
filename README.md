@@ -11,6 +11,8 @@ Multiclass, Weight Decay and General Losses </h1>
 <a href="https://www.weizmann.ac.il/math/irani/" target="_blank">Michal Irani</a>
 </h3>
 
+<h4 align="center"> NeurIPS 2023 </h4>
+
 ## 
 Pytorch implementation of the NeurIPS 2023 paper: [Deconstructing Data Reconstruction:
 Multiclass, Weight Decay and General Losses](https://arxiv.org/abs/2307.01827).
