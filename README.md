@@ -12,7 +12,7 @@ Multiclass, Weight Decay and General Losses </h1>
 </h3>
 
 ## 
-Pytorch implementation of the paper: [Deconstructing Data Reconstruction:
+Pytorch implementation of the NeurIPS 2023 paper: [Deconstructing Data Reconstruction:
 Multiclass, Weight Decay and General Losses](https://arxiv.org/abs/2307.01827).
 
 #### 
